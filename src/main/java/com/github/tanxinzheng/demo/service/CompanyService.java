@@ -48,9 +48,10 @@ public class CompanyService {
         return employees.get(id);
     }
 
-    public void addEmployee(Employee employee){
+    public Employee addEmployee(Employee employee){
         employee.setEmployeeId(new Random().nextInt(100));
         employees.put(employee.getEmployeeId(), employee);
+        return employee;
     }
 
     public void updateEmployee(Employee employee){

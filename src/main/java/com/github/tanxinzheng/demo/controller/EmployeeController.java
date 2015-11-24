@@ -6,9 +6,7 @@ import com.github.tanxinzheng.demo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,6 +35,42 @@ public class EmployeeController {
             resources.add(resource);
         }
         return resources;
+    }
+
+    /**
+     * 查询单个员工信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/employees/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public Resource<Employee> getEmployee(@PathVariable(value = "id") Integer id) {
+        Employee employee = companyService.getEmployee(id);
+        Resource<Employee> resource = new Resource<Employee>(employee);
+        return resource;
+    }
+
+    /**
+     * 新增员工信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/employees", method = RequestMethod.POST)
+    @ResponseBody
+    public Resource<Employee> addEmployee(@RequestBody Employee employee) {
+        Employee employeeResult = companyService.addEmployee(employee);
+        Resource<Employee> resource = new Resource<Employee>(employeeResult);
+        return resource;
+    }
+
+    /**
+     * 删除单个员工信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/employees/{id}", method = RequestMethod.DELETE)
+    public void deleteEmployee(@PathVariable(value = "id") Integer id) {
+        companyService.removeEmployee(id);
     }
 
 }

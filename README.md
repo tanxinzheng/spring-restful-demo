@@ -28,6 +28,14 @@ REST 是 Representational state transfer 的缩写，翻译过来的意思是表
 -   超媒体作为应用状态的引擎（HATEOAS）。客户端通过服务器提供的超媒体内容中动态提供的动作来进行状态转换。这也是本文所要介绍的内容。
 
 
+## 示例
+
+### 新增资源 POST
+··
+
+··
+
+
 ## 参考文献
 1.  [使用 Spring HATEOAS 开发 REST 服务](http://www.ibm.com/developerworks/cn/java/j-lo-SpringHATEOAS/)
 2.  [Restful API最佳实践及设计](http://segmentfault.com/a/1190000002949234#articleHeader3)
