@@ -11,7 +11,6 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
  */
 @SpringBootApplication
 @EnableAutoConfiguration
-//@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class Application {
 	
 	public static void main(String[] args) {
