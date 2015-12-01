@@ -1,5 +1,11 @@
 package com.github.tanxinzheng.demo.domain;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -8,7 +14,11 @@ import java.util.Date;
 public class Employee {
 
     private Integer employeeId;
+    @NotEmpty(message = "名称不能为空")
+    @Length(min = 4, max = 10, message = "字符长度范围[4,10]")
     private String name;
+    @Min(value = 0, message = "字符长度范围[1, 999]")
+    @Max(value = 999, message = "字符长度范围[1, 999]")
     private Integer age;
     private Date birthDay;
     private Integer departmentId;

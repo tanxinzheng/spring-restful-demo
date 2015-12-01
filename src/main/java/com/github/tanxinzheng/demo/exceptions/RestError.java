@@ -1,11 +1,13 @@
 package com.github.tanxinzheng.demo.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Jeng on 15/11/29.
@@ -16,6 +18,7 @@ public class RestError {
     private String message;
     private int status;
     private String error;
+    private List<FieldError> errors;
     private String path;
     private String exception;
 
@@ -73,5 +76,13 @@ public class RestError {
 
     public void setException(String exception) {
         this.exception = exception;
+    }
+
+    public List<FieldError> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<FieldError> errors) {
+        this.errors = errors;
     }
 }

@@ -1,6 +1,8 @@
 package com.github.tanxinzheng.demo.controller;
 
+import com.github.tanxinzheng.demo.domain.Department;
 import com.github.tanxinzheng.demo.domain.Employee;
+import com.github.tanxinzheng.demo.exceptions.ArgumentValidaErrorException;
 import com.github.tanxinzheng.demo.exceptions.NotFoundResourcesException;
 import com.github.tanxinzheng.demo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -65,13 +68,28 @@ public class EmployeeController {
      */
     @RequestMapping(value = "/employees", method = RequestMethod.POST)
     @ResponseBody
-    public Resource<Employee> addEmployee(@RequestBody Employee employee, BindingResult bindingResult) throws BindException {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Resource<Employee> addEmployee(@Valid @RequestBody Employee employee, BindingResult bindingResult) throws ArgumentValidaErrorException {
         if(bindingResult.hasErrors()){
-            throw new BindException(bindingResult);
+            throw new ArgumentValidaErrorException(bindingResult);
         }
         Employee employeeResult = companyService.addEmployee(employee);
         Resource<Employee> resource = new Resource<Employee>(employeeResult);
         return resource;
+    }
+
+    /**
+     * 更新单个员工信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/employees/{id}", method = RequestMethod.PUT)
+    public void updateEmployee(@PathVariable(value = "id") Integer id) {
+        Employee employee = companyService.getEmployee(id);
+        if(employee == null){
+            throw new NotFoundResourcesException("未找到需操作的资源");
+        }
+        companyService.removeEmployee(id);
     }
 
     /**
@@ -80,7 +98,12 @@ public class EmployeeController {
      * @return
      */
     @RequestMapping(value = "/employees/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmployee(@PathVariable(value = "id") Integer id) {
+        Employee employee = companyService.getEmployee(id);
+        if(employee == null){
+            throw new NotFoundResourcesException("未找到需操作的资源");
+        }
         companyService.removeEmployee(id);
     }
 
