@@ -30,12 +30,49 @@ REST 是 Representational state transfer 的缩写，翻译过来的意思是表
 
 ## 示例
 
-### 新增资源 POST
+### 新增资源
+请求头
 ··
 
 ··
 
+### 自定义返回结果格式
+在之前很多的API都会对返回结果进行封装如下图：
+```
+    {
+      "data" : {
+        "id" : 123,
+        "name" : "John"
+      }
+    }
+```
+理由很简单：这样做可以很容易扩展返回结果，你可以加入一些分页信息，一些数据的元信息等－这对于那些不容易访问到返回头的API使用者来说确实有用，但是随着“标准”的发展（cors和http://tools.ietf.org/html/rfc5988#page-6都开始被加入到标准中了），我个人推荐不要那么做。
+
+### 自动加载相关资源
+很多复杂的API查询接口都会返回相对复杂的资源对象，此复杂的资源对象里面可能包含多个相关的子资源，
+个人根据实际项目经验分为如下几种情况：在查询参数中添加embed（或expend），embed可以是一个逗号分隔的串，例如：
+请求：
+```
+    GET /departments/12?embed=customer.name,assigned_user
+```
+响应：
+```
+    {
+      "id" : 12,
+      "subject" : "I have a question!",
+      "summary" : "Hi, ....",
+      "customer" : {
+        "name" : "Bob"
+      },
+      assigned_user: {
+       "id" : 42,
+       "name" : "Jim",
+      }
+    }
+```
+* 注：若按照此功能对服务端的设计要求会比较高，但提高了API的可重用性
 
 ## 参考文献
-1.  [使用 Spring HATEOAS 开发 REST 服务](http://www.ibm.com/developerworks/cn/java/j-lo-SpringHATEOAS/)
-2.  [Restful API最佳实践及设计](http://segmentfault.com/a/1190000002949234#articleHeader3)
+- [使用 Spring HATEOAS 开发 REST 服务](http://www.ibm.com/developerworks/cn/java/j-lo-SpringHATEOAS/)
+- [Restful API最佳实践及设计](http://segmentfault.com/a/1190000002949234#articleHeader3)
+- [Restful API 设计最佳实践](http://blog.jobbole.com/41233/)

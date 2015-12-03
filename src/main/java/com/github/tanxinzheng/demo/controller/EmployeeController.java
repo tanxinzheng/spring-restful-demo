@@ -1,6 +1,5 @@
 package com.github.tanxinzheng.demo.controller;
 
-import com.github.tanxinzheng.demo.domain.Department;
 import com.github.tanxinzheng.demo.domain.Employee;
 import com.github.tanxinzheng.demo.exceptions.ArgumentValidaErrorException;
 import com.github.tanxinzheng.demo.exceptions.NotFoundResourcesException;
@@ -8,18 +7,14 @@ import com.github.tanxinzheng.demo.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Jeng on 15/11/22.
@@ -36,7 +31,13 @@ public class EmployeeController {
      */
     @RequestMapping(value = "/employees", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<Resource<Employee>> getEmployees() {
+    public Collection<Resource<Employee>> getEmployees(
+            @RequestParam(value = "sorts", required = false) String sorts,      // 排序 +name,-age指姓名升序，年龄降序，注：+号可省略
+            @RequestParam(value = "fields", required = false) String fields,    // 只查询需要的字段
+            @RequestParam(value = "limit", required = false) int limit,         // 指定返回记录的数量，每页页数
+            @RequestParam(value = "offset", required = false) int offset,       // 指定返回记录的开始位置，当前页第一条数据的页码
+            @RequestParam(value = "expends", required = false) String expends   // 自动加载相关子资源,如?expends=department则加载部门资源信息
+    ) {
         Collection<Employee> albums = companyService.findEmployees();
         List<Resource<Employee>> resources = new ArrayList<Resource<Employee>>();
         for (Employee album : albums) {
@@ -53,12 +54,13 @@ public class EmployeeController {
      */
     @RequestMapping(value = "/employees/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<Employee> getEmployee(@PathVariable(value = "id") Integer id, HttpServletRequest request) throws NoSuchRequestHandlingMethodException {
+    @ResponseStatus(HttpStatus.OK)
+    public Resource<Employee> getEmployee(@PathVariable(value = "id") Integer id, HttpServletRequest request) throws NoSuchRequestHandlingMethodException {
         Employee employee = companyService.getEmployee(id);
         if(employee == null){
             throw new NotFoundResourcesException("资源为空");
         }
-        return new ResponseEntity<Employee>(employee, HttpStatus.OK);
+        return new Resource<Employee>(employee);
     }
 
     /**
