@@ -15,7 +15,7 @@ public class Employee {
 
     private Integer employeeId;
     @NotEmpty(message = "名称不能为空")
-    @Length(min = 4, max = 10, message = "字符长度范围[4,10]")
+    @Length(min = 2, max = 10, message = "字符长度范围[2,10]")
     private String name;
     @Min(value = 0, message = "字符长度范围[1, 999]")
     @Max(value = 999, message = "字符长度范围[1, 999]")

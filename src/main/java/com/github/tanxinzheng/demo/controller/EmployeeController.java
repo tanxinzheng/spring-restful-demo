@@ -34,8 +34,8 @@ public class EmployeeController {
     public Collection<Resource<Employee>> getEmployees(
             @RequestParam(value = "sorts", required = false) String sorts,      // 排序 +name,-age指姓名升序，年龄降序，注：+号可省略
             @RequestParam(value = "fields", required = false) String fields,    // 只查询需要的字段
-            @RequestParam(value = "limit", required = false) int limit,         // 指定返回记录的数量，每页页数
-            @RequestParam(value = "offset", required = false) int offset,       // 指定返回记录的开始位置，当前页第一条数据的页码
+            @RequestParam(value = "limit", required = false) Integer limit,         // 指定返回记录的数量，每页页数
+            @RequestParam(value = "offset", required = false) Integer offset,       // 指定返回记录的开始位置，当前页第一条数据的页码
             @RequestParam(value = "expends", required = false) String expends   // 自动加载相关子资源,如?expends=department则加载部门资源信息
     ) {
         Collection<Employee> albums = companyService.findEmployees();
@@ -86,6 +86,7 @@ public class EmployeeController {
      * @return
      */
     @RequestMapping(value = "/employees/{id}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void updateEmployee(@PathVariable(value = "id") Integer id) {
         Employee employee = companyService.getEmployee(id);
         if(employee == null){

@@ -52,13 +52,13 @@ public class ServletConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer//.favorPathExtension(true)
-                //.useJaf(false)
-                //.favorParameter(true)
-                //.parameterName("mediaType")
-                //.ignoreAcceptHeader(true)
+        configurer.favorPathExtension(true)
+                .useJaf(false)
+                .favorParameter(true)
+                .parameterName("mediaType")
+                .ignoreAcceptHeader(true)
                 .defaultContentType(MediaType.APPLICATION_JSON)
-                //.mediaType("xml", MediaType.APPLICATION_XML)
+                .mediaType("xml", MediaType.APPLICATION_XML)
                 .mediaType("json", MediaType.APPLICATION_JSON);
     }
 }

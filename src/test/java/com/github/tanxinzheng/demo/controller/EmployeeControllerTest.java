@@ -1,39 +1,109 @@
 package com.github.tanxinzheng.demo.controller;
 
-import static org.junit.Assert.*;
+import com.alibaba.fastjson.JSONObject;
+import com.github.tanxinzheng.demo.ServletConfig;
+import com.github.tanxinzheng.demo.domain.Employee;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockServletContext;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import java.util.Date;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Created by Jeng on 15/11/25.
  */
-public class EmployeeControllerTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = {MockServletContext.class, ServletConfig.class})
+@WebAppConfiguration
+public class EmployeeControllerTest  {
 
-    @org.junit.Before
+    @Autowired
+    private WebApplicationContext wac;
+
+    private MockMvc mvc;
+
+    private Integer id;
+
+    @Before
     public void setUp() throws Exception {
-
+        mvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
-    @org.junit.After
+    @After
     public void tearDown() throws Exception {
 
     }
 
-    @org.junit.Test
-    public void testGetEmployees() throws Exception {
-
-    }
-
-    @org.junit.Test
-    public void testGetEmployee() throws Exception {
-
-    }
-
-    @org.junit.Test
+    @Test
     public void testAddEmployee() throws Exception {
-
+        Employee employee = new Employee();
+        employee.setAge(1);
+        employee.setBirthDay(new Date());
+        employee.setName("张三");
+        String jsonParams = JSONObject.toJSONString(employee);
+        ResultActions actions = mvc.perform(MockMvcRequestBuilders.post("/employees")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonParams))
+                .andDo(print());
+        actions.andExpect(status().isCreated());
+        String resultJson = actions.andReturn().getResponse().getContentAsString();
+        Employee result = JSONObject.parseObject(resultJson, Employee.class);
+        Assert.assertNotNull(result.getEmployeeId());
+        id = result.getEmployeeId();
     }
 
-    @org.junit.Test
-    public void testDeleteEmployee() throws Exception {
+    @Test
+    public void testGetEmployee() throws Exception {
+        ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/employees/{0}", id)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print());
+        actions.andExpect(status().isOk());
+    }
 
+    @Test
+    public void testGetEmployees() throws Exception {
+        ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/employees")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print()); // 使用print()可打印出当前测试设计的HTTP Request/Responsed的所有信息，方便定位问题
+        actions.andExpect(status().isOk());
+//		actions.andExpect(content().string(equalTo("Hello world")));
+    }
+
+    @Test
+    public void testDeleteEmployee() throws Exception {
+        ResultActions actions = mvc.perform(MockMvcRequestBuilders.delete("/employees/{0}", id)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print());
+        actions.andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void testUpdateEmployee() throws Exception {
+        Employee employee = new Employee();
+        employee.setName("李四");
+        employee.setEmployeeId(id);
+        ResultActions actions = mvc.perform(MockMvcRequestBuilders.put("/employees/{0}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(JSONObject.toJSONString(employee)))
+                .andDo(print());
+        actions.andExpect(status().isAccepted());
     }
 }
