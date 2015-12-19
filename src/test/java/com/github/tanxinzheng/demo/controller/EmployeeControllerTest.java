@@ -3,6 +3,7 @@ package com.github.tanxinzheng.demo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.github.tanxinzheng.demo.ServletConfig;
 import com.github.tanxinzheng.demo.domain.Employee;
+import com.github.tanxinzheng.demo.exceptions.RestError;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.text.MessageFormat;
 import java.util.Date;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -72,6 +74,33 @@ public class EmployeeControllerTest  {
     }
 
     /**
+     * 新增资源单元测试
+     * @throws Exception
+     */
+    @Test
+    public void testAddEmployeeByError() throws Exception {
+        Employee employee = new Employee();
+        employee.setAge(1);
+        employee.setBirthDay(new Date());
+        employee.setName("tanxinzheng");
+        String jsonParams = JSONObject.toJSONString(employee);
+        //System.out.println("params:");
+        //System.out.println(jsonParams);
+        ResultActions actions = mvc.perform(MockMvcRequestBuilders.post("/employees")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonParams))
+                .andDo(print());
+        actions.andExpect(status().isBadRequest());
+        String resultJson = actions.andReturn().getResponse().getContentAsString();
+        RestError restError = JSONObject.parseObject(resultJson, RestError.class);
+        Assert.assertNotNull(restError);
+        Assert.assertEquals("请求参数校验数目不正确", 2, restError.getErrors().size());
+        //System.out.println("result:");
+        //System.out.println(resultJson);
+    }
+
+    /**
      * 查询单个资源测试案例
      * @throws Exception
      */
@@ -100,7 +129,7 @@ public class EmployeeControllerTest  {
      * @throws Exception
      */
     @Test
-    @Ignore
+    //@Ignore
     public void testDeleteEmployee() throws Exception {
         ResultActions actions = mvc.perform(MockMvcRequestBuilders.delete("/employees/{0}", id)
                 .accept(MediaType.APPLICATION_JSON))
@@ -113,7 +142,7 @@ public class EmployeeControllerTest  {
      * @throws Exception
      */
     @Test
-    @Ignore
+    //@Ignore
     public void testUpdateEmployee() throws Exception {
         Employee employee = new Employee();
         employee.setName("李四");

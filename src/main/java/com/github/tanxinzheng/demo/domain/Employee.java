@@ -3,6 +3,7 @@ package com.github.tanxinzheng.demo.domain;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -22,6 +23,9 @@ public class Employee {
     private Integer age;
     private Date birthDay;
     private Integer departmentId;
+    @Valid
+    @NotNull
+    private Department department;
 
     public Integer getEmployeeId() {
         return employeeId;
@@ -61,5 +65,13 @@ public class Employee {
 
     public void setDepartmentId(Integer departmentId) {
         this.departmentId = departmentId;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 }
