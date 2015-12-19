@@ -99,31 +99,31 @@ public class EmployeeControllerTest  {
 //		actions.andExpect(content().string(equalTo("Hello world")));
     }
 
-    /**
-     * 删除资源单元案例
-     * @throws Exception
-     */
-    @Test
-    public void testDeleteEmployee() throws Exception {
-        ResultActions actions = mvc.perform(MockMvcRequestBuilders.delete("/employees/{0}", id)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
-        actions.andExpect(status().isNoContent());
-    }
-
-    /**
-     * 更新资源测试案例
-     * @throws Exception
-     */
-    @Test
-    public void testUpdateEmployee() throws Exception {
-        Employee employee = new Employee();
-        employee.setName("李四");
-        employee.setEmployeeId(id);
-        ResultActions actions = mvc.perform(MockMvcRequestBuilders.put("/employees/{0}", id)
-                .accept(MediaType.APPLICATION_JSON)
-                .content(JSONObject.toJSONString(employee)))
-                .andDo(print());
-        actions.andExpect(status().isAccepted());
-    }
+//    /**
+//     * 删除资源单元案例
+//     * @throws Exception
+//     */
+//    @Test
+//    public void testDeleteEmployee() throws Exception {
+//        ResultActions actions = mvc.perform(MockMvcRequestBuilders.delete("/employees/{0}", id)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print());
+//        actions.andExpect(status().isNoContent());
+//    }
+//
+//    /**
+//     * 更新资源测试案例
+//     * @throws Exception
+//     */
+//    @Test
+//    public void testUpdateEmployee() throws Exception {
+//        Employee employee = new Employee();
+//        employee.setName("李四");
+//        employee.setEmployeeId(id);
+//        ResultActions actions = mvc.perform(MockMvcRequestBuilders.put("/employees/{0}", id)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .content(JSONObject.toJSONString(employee)))
+//                .andDo(print());
+//        actions.andExpect(status().isAccepted());
+//    }
 }
