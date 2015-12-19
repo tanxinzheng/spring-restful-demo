@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tanxinzheng/spring-restful-demo.svg?branch=master)](https://travis-ci.org/tanxinzheng/spring-restful-demo)
+
 # Spring REST Demo
 Restful架构方式越来越主流，各种REST架构方式也越来越多，虽然可以架构REST的方式和语言越来越多，但是其最关键的是它的规范及定义。
 之前在项目中也搭建过REST风格到架构，但是通用型和实用性并不符合界内的规范，
