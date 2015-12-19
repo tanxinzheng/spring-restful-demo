@@ -3,10 +3,7 @@ package com.github.tanxinzheng.demo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.github.tanxinzheng.demo.ServletConfig;
 import com.github.tanxinzheng.demo.domain.Employee;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -96,34 +93,35 @@ public class EmployeeControllerTest  {
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print()); // 使用print()可打印出当前测试设计的HTTP Request/Responsed的所有信息，方便定位问题
         actions.andExpect(status().isOk());
-//		actions.andExpect(content().string(equalTo("Hello world")));
     }
 
-//    /**
-//     * 删除资源单元案例
-//     * @throws Exception
-//     */
-//    @Test
-//    public void testDeleteEmployee() throws Exception {
-//        ResultActions actions = mvc.perform(MockMvcRequestBuilders.delete("/employees/{0}", id)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print());
-//        actions.andExpect(status().isNoContent());
-//    }
-//
-//    /**
-//     * 更新资源测试案例
-//     * @throws Exception
-//     */
-//    @Test
-//    public void testUpdateEmployee() throws Exception {
-//        Employee employee = new Employee();
-//        employee.setName("李四");
-//        employee.setEmployeeId(id);
-//        ResultActions actions = mvc.perform(MockMvcRequestBuilders.put("/employees/{0}", id)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content(JSONObject.toJSONString(employee)))
-//                .andDo(print());
-//        actions.andExpect(status().isAccepted());
-//    }
+    /**
+     * 删除资源单元案例
+     * @throws Exception
+     */
+    @Test
+    @Ignore
+    public void testDeleteEmployee() throws Exception {
+        ResultActions actions = mvc.perform(MockMvcRequestBuilders.delete("/employees/{0}", id)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print());
+        actions.andExpect(status().isNoContent());
+    }
+
+    /**
+     * 更新资源测试案例
+     * @throws Exception
+     */
+    @Test
+    @Ignore
+    public void testUpdateEmployee() throws Exception {
+        Employee employee = new Employee();
+        employee.setName("李四");
+        employee.setEmployeeId(id);
+        ResultActions actions = mvc.perform(MockMvcRequestBuilders.put("/employees/{0}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(JSONObject.toJSONString(employee)))
+                .andDo(print());
+        actions.andExpect(status().isAccepted());
+    }
 }

@@ -5,8 +5,8 @@
     <!--  Define the storage location of the log files. (勿在LogBack里面使用相对路径)                                                                         -->
     <!-- -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -->
     <property name="LOG_LEVEL" value="DEBUG" />
-    <property name="LOG_HOME" value="./logs" />
-    <property name="PROJECT_NAME" value="${PRO}"/>
+    <property name="LOG_HOME" value="./target/logs" />
+    <property name="PROJECT_NAME" value="${PROJECT_NAME}"/>
     <!-- -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -->
     <!--  Console output                                                                                                        -->
     <!-- -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -->
