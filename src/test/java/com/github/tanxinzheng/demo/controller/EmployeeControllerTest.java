@@ -51,6 +51,10 @@ public class EmployeeControllerTest  {
 
     }
 
+    /**
+     * 新增资源单元测试
+     * @throws Exception
+     */
     @Test
     public void testAddEmployee() throws Exception {
         Employee employee = new Employee();
@@ -70,6 +74,10 @@ public class EmployeeControllerTest  {
         id = result.getEmployeeId();
     }
 
+    /**
+     * 查询单个资源测试案例
+     * @throws Exception
+     */
     @Test
     public void testGetEmployee() throws Exception {
         ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/employees/{0}", id)
@@ -78,6 +86,10 @@ public class EmployeeControllerTest  {
         actions.andExpect(status().isOk());
     }
 
+    /**
+     * 查询资源集合单元测试
+     * @throws Exception
+     */
     @Test
     public void testGetEmployees() throws Exception {
         ResultActions actions = mvc.perform(MockMvcRequestBuilders.get("/employees")
@@ -87,6 +99,10 @@ public class EmployeeControllerTest  {
 //		actions.andExpect(content().string(equalTo("Hello world")));
     }
 
+    /**
+     * 删除资源单元案例
+     * @throws Exception
+     */
     @Test
     public void testDeleteEmployee() throws Exception {
         ResultActions actions = mvc.perform(MockMvcRequestBuilders.delete("/employees/{0}", id)
@@ -95,6 +111,10 @@ public class EmployeeControllerTest  {
         actions.andExpect(status().isNoContent());
     }
 
+    /**
+     * 更新资源测试案例
+     * @throws Exception
+     */
     @Test
     public void testUpdateEmployee() throws Exception {
         Employee employee = new Employee();

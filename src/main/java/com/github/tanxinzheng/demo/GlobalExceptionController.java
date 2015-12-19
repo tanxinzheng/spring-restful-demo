@@ -31,31 +31,12 @@ public class GlobalExceptionController extends ResponseEntityExceptionHandler {
     private static final Log logger = LogFactory
             .getLog(GlobalExceptionController.class);
 
-//    @ExceptionHandler(SQLException.class)
-//    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ModelAndView handleSQLException(HttpServletRequest request,
-//                                           SQLException ex) {
-//        handleLog(request, ex);
-//        Map<String, Object> errorMap = new HashMap<String, Object>();
-//        errorMap.put("code", HttpStatus.INTERNAL_SERVER_ERROR);
-//        errorMap.put("Requested", request.getRequestURL());
-//        errorMap.put("message", ex.toString());
-//
-//        return new ModelAndView(JSONUtils.VIEW_NAME,
-//                JSONStringView.JSON_MODEL_DATA, errorMap);
-//    }
-//
-//    @ExceptionHandler(BadRequestException.class)
-//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-//    public ModelAndView handleBadRequestException(
-//            HttpServletRequest request, BadRequestException ex) {
-//        handleLog(request, ex);
-//        ExceptionModel exceptionModel = getExceptionModel(
-//                HttpStatus.BAD_REQUEST, ex);
-//        return new ModelAndView(JSONUtils.VIEW_NAME,
-//                JSONStringView.JSON_MODEL_DATA, exceptionModel);
-//    }
-
+    /**
+     * 未找到相应资源
+     * @param ex
+     * @param request
+     * @return
+     */
     @ExceptionHandler(NotFoundResourcesException.class)
     public ResponseEntity<RestError> handleNotFoundException(NotFoundResourcesException ex, HttpServletRequest request) {
         RestError restError = new RestError(ex, request);
@@ -65,6 +46,12 @@ public class GlobalExceptionController extends ResponseEntityExceptionHandler {
 
     MessageSource messageSource;
 
+    /**
+     * 非法请求参数校验异常
+     * @param ex
+     * @param request
+     * @return
+     */
     @ExceptionHandler(ArgumentValidaErrorException.class)
     public ResponseEntity processValidationError(ArgumentValidaErrorException ex, HttpServletRequest request) {
         RestError restError = new RestError(ex, request);
@@ -75,7 +62,13 @@ public class GlobalExceptionController extends ResponseEntityExceptionHandler {
         restError.setErrors(fieldErrors);
         return new ResponseEntity<RestError>(restError, HttpStatus.BAD_REQUEST);
     }
-    // 国际化错误信息应该异常中处理
+
+    /**
+     * 解析错误信息
+     * TODO 国际化错误信息应该异常中处理
+     * @param fieldError
+     * @return
+     */
     private String resolveLocalizedErrorMessage(FieldError fieldError) {
         Locale currentLocale =  LocaleContextHolder.getLocale();
         String localizedErrorMessage = messageSource.getMessage(fieldError, currentLocale);
@@ -90,48 +83,4 @@ public class GlobalExceptionController extends ResponseEntityExceptionHandler {
         return localizedErrorMessage;
     }
 
-//    @ExceptionHandler(Exception.class)
-//    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ModelAndView handleAllException(HttpServletRequest request,
-//                                           Exception ex) {
-//
-//        handleLog(request, ex);
-//        Map<String, Object> errorMap = new HashMap<String, Object>();
-//        errorMap.put("code",
-//                Integer.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()));
-//        errorMap.put("message", ex.toString());
-//        return new ModelAndView(JSONUtils.VIEW_NAME,
-//                JSONStringView.JSON_MODEL_DATA, errorMap);
-//
-//    }
-
-//    private ExceptionModel getExceptionModel(HttpStatus httpStatus,
-//                                             CommonException ex) {
-//        ExceptionModel exceptionModel = new ExceptionModel();
-//        ErrorENUM errorEnum = ex.getErrorEnum();
-//        exceptionModel.setStatus(httpStatus.value());
-//        exceptionModel.setMoreInfo(ex.getMoreInfo());
-//        if (errorEnum != null) {
-//            exceptionModel.setErrorCode(errorEnum.getCode());
-//            exceptionModel.setMessage(errorEnum.toString());
-//        }
-//        return exceptionModel;
-//    }
-
-//    private void handleLog(HttpServletRequest request, Exception ex) {
-//        Map parameter = request.getParameterMap();
-//        StringBuffer logBuffer = new StringBuffer();
-//        if (request != null) {
-//            logBuffer.append("  request method=" + request.getMethod());
-//            logBuffer.append("  url=" + request.getRequestURL());
-//        }
-//        if (ex instanceof CommonException) {
-//            logBuffer.append("  moreInfo="
-//                    + ((CommonException) ex).getMoreInfo());
-//        }
-//        if (ex != null) {
-//            logBuffer.append("  exception:" + ex);
-//        }
-//        logger.error(logBuffer.toString());
-//    }
 }
