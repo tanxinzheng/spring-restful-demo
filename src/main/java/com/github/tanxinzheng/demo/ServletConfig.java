@@ -4,9 +4,11 @@ import org.hibernate.validator.HibernateValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
@@ -17,6 +19,12 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @ComponentScan(basePackages = "com.github")// 配置包扫描路径
 @Configuration// 启用注解式配置
 public class ServletConfig extends WebMvcConfigurerAdapter {
+
+
+    @Bean
+    public HiddenHttpMethodFilter getHiddenHttpMethodFilter(){
+        return new HiddenHttpMethodFilter();
+    }
 
     /**
      * 设置视图解析器，以及页面路径

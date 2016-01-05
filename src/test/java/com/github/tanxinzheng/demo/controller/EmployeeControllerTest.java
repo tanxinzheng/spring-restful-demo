@@ -1,6 +1,7 @@
 package com.github.tanxinzheng.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.tanxinzheng.demo.CorsFilter;
 import com.github.tanxinzheng.demo.ServletConfig;
 import com.github.tanxinzheng.demo.domain.Employee;
 import org.junit.After;
@@ -11,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockFilterConfig;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -19,6 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 import java.util.Date;
 
@@ -37,13 +40,19 @@ public class EmployeeControllerTest  {
     @Autowired
     private WebApplicationContext wac;
 
+//    @Autowired
+//    HiddenHttpMethodFilter hiddenHttpMethodFilter;
+
     private MockMvc mvc;
 
     private Integer id;
 
     @Before
     public void setUp() throws Exception {
-        mvc = MockMvcBuilders.webAppContextSetup(wac).build();
+//        hiddenHttpMethodFilter.init(new MockFilterConfig());
+        mvc = MockMvcBuilders.webAppContextSetup(wac)
+                //.addFilters(hiddenHttpMethodFilter)
+                .build();
     }
 
     @After
@@ -99,31 +108,33 @@ public class EmployeeControllerTest  {
 //		actions.andExpect(content().string(equalTo("Hello world")));
     }
 
-//    /**
-//     * 删除资源单元案例
-//     * @throws Exception
-//     */
-//    @Test
-//    public void testDeleteEmployee() throws Exception {
-//        ResultActions actions = mvc.perform(MockMvcRequestBuilders.delete("/employees/{0}", id)
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print());
-//        actions.andExpect(status().isNoContent());
-//    }
-//
-//    /**
-//     * 更新资源测试案例
-//     * @throws Exception
-//     */
-//    @Test
-//    public void testUpdateEmployee() throws Exception {
-//        Employee employee = new Employee();
-//        employee.setName("李四");
-//        employee.setEmployeeId(id);
-//        ResultActions actions = mvc.perform(MockMvcRequestBuilders.put("/employees/{0}", id)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content(JSONObject.toJSONString(employee)))
-//                .andDo(print());
-//        actions.andExpect(status().isAccepted());
-//    }
+    /**
+     * 删除资源单元案例
+     * @throws Exception
+     */
+    @Test
+    public void testDeleteEmployee() throws Exception {
+        ResultActions actions = mvc.perform(MockMvcRequestBuilders.delete("/employees/{0}", id)
+//                .header("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE")
+//                .param("_method","delete")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print());
+        actions.andExpect(status().isNoContent());
+    }
+
+    /**
+     * 更新资源测试案例
+     * @throws Exception
+     */
+    @Test
+    public void testUpdateEmployee() throws Exception {
+        Employee employee = new Employee();
+        employee.setName("李四");
+        employee.setEmployeeId(id);
+        ResultActions actions = mvc.perform(MockMvcRequestBuilders.put("/employees/{0}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(JSONObject.toJSONString(employee)))
+                .andDo(print());
+        actions.andExpect(status().isAccepted());
+    }
 }
